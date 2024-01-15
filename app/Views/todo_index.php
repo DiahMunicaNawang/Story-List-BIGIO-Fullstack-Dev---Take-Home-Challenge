@@ -9,57 +9,87 @@
 </head>
 <body>
     <div class="container">
-    <h1>Todo List</h1>
-    <form action="">
+        <h1>Story List</h1>
+
+        <form action="<?= base_url('create-todo') ?>" method="post">
+            <div class="mb-3">
+                <label for="todo" class="form-label">Add Story</label>
+                <input type="text" name="todo" class="form-control" id="todo" placeholder="Isikan Acara">
+            </div>
+            <div class="mb-3">
+                <label for="deadline" class="form-label">Deadline</label>
+                <input type="date" name="deadline" class="form-control" id="deadline">
+            </div>
+            <button type="submit" class="btn btn-primary">Tambahkan</button>
+        </form>
+        <br>
+
+        
+        <?php if (!empty($todos)) : ?>
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Tambahkan Acara</label>
-        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Isikan Acara">
+        <h1>Story</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Todo</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($todos as $key => $todo) : ?>
+                    <?php if ($todo->status == 0) : ?>
+                        <tr>
+                            <td><?= $key + 1 ?></td>
+                            <td><?= $todo->todo ?></td>
+                            <td><?= date('d/m/Y', strtotime($todo->deadline)) ?></td>
+                            <td>
+                                <span class="badge rounded-pill bg-danger">Belum Selesai</span>
+                            </td>
+                            <td>
+                                <a href="<?= base_url('done-todo/' . $todo->id) ?>" class="btn btn-primary">Selesaikan</a>
+                                <a href="<?= base_url('edit-todo/' . $todo->id) ?>" class="btn btn-warning">Edit</a>
+                                <a href="<?= base_url('hapus-todo/' . $todo->id) ?>" class="btn btn-danger">Hapus</a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
+
     <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Deadline</label>
-        <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Isikan Acara">
+        <h1>Completed</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Todo</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($todos as $key => $todo) : ?>
+                    <?php if ($todo->status == 1) : ?>
+                        <tr>
+                            <td><?= $key + 1 ?></td>
+                            <td><?= $todo->todo ?></td>
+                            <td><?= date('d/m/Y', strtotime($todo->deadline)) ?></td>
+                            <td>
+                                <span class="badge rounded-pill bg-success">Selesai</span>
+                            </td>
+                            <td>
+                                <a href="<?= base_url('restore-todo/' . $todo->id) ?>" class="btn btn-warning">Restore</a>
+                                <a href="<?= base_url('hapus-todo/' . $todo->id) ?>" class="btn btn-danger">Hapus</a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
-    <button type="button" class="btn btn-primary">Tambahkan</button>
-    </form>
-    <br></br>
-    <div class="mb-3">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Todo</th>
-                <th>Deadline</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr>
-                <td>1</td>
-                <td>Belajar Membuat Controller Codeigniter 4</td>
-                <td>14/10/2023</td>
-                <td>
-                <span class="badge rounded-pill bg-danger">Belum Selesai</span>
-                </td>
-                <td>
-                <button class="btn btn-primary">
-                    Selesaikan
-                </button>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Belajar Membuat Project Codeigniter 4</td>
-                <td>14/10/2023</td>
-                <td>
-                <span class="badge rounded-pill bg-success">Selesai</span>
-                </td>
-                <td>
-                <button class="btn btn-primary">
-                    Selesaikan
-                </button>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-</body>
-</html>
+<?php endif; ?>
